@@ -20,17 +20,11 @@ output application/json
 				<ee:set-variable variableName="httpStatus" ><![CDATA[204]]></ee:set-variable>
 			</ee:variables>
 		</ee:transform>
-		<bip-log-sdk:info-log doc:name="Response" doc:id="bba7cffc-40db-424f-900d-091735e323b2" message="Response Healthcheck Service" businessProcess="Healthcheck Service">
+		<bip-log-sdk:info-log doc:name="Response" doc:id="bba7cffc-40db-424f-900d-091735e323b2" message="#[&quot;Response Healthcheck Service - Status OK for &quot; ++ p('application.name') ++ &quot; service&quot;]" businessProcess="Healthcheck Service">
 			<bip-log-sdk:content ><![CDATA[#[%dw 2.0
 output application/json
 ---
-{
-	"correlationId": correlationId,
-	"message": "Status OK for $(application.name) service",
-	"httpCode": vars.httpCode,
-	"timestamp": now(),
-	"appName": app.name
-}]]]></bip-log-sdk:content>
+vars.httpCode]]]></bip-log-sdk:content>
 		</bip-log-sdk:info-log>
 	</sub-flow>
 </mule>
