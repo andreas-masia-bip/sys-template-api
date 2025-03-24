@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd 
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="b932087e-041e-4a56-9278-40bb12cecb8f" basePath="/*" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<global-property doc:name="Global Property" doc:id="f36e86ea-4aeb-4238-8d7c-2ce4050f2947" name="mule.env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="e3bd4c52-0879-4669-bc0f-2a8e74617691" file="properties/common-config.yaml" />
+	<configuration-properties doc:name="Configuration properties" doc:id="2ccc1947-6510-4b65-a4e9-56c7994da7a8" file="properties/${mule.env}-config.yaml" />
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="50b264e8-7132-4a97-9ef7-37e53c35f0cd">
+		<salesforce:oauth-user-pass-connection consumerKey="3MVG9PwZx9R6_UrcqiADWBKqtKJgCom.U__8XhdAtGr0dHFshic4QOELiOQ.WSDBsyfN0LGKCyZLC33vpFg3U" consumerSecret="2A5AC98AD87D04EC441F0CCD5FD895F1E5E344219C898D917E44C08569637EEC" username="mulesoft.integration.biptest@salesforce.com" password="Wingp7cK-FTgQSJ" securityToken="1TIPIFVUVPdhpmiQFyA5itAb"/>
+	</salesforce:sfdc-config>
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d9d11b23-cc5c-4193-bf2c-996623aca19a" file="properties/${mule.env}-config.yaml" key="${encrypt.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+</mule>

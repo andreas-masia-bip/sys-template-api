@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:bip-log-sdk="http://www.mulesoft.org/schema/mule/bip-log-sdk" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/bip-log-sdk http://www.mulesoft.org/schema/mule/bip-log-sdk/current/mule-bip-log-sdk.xsd">
+	<sub-flow name="health-check" doc:id="968609aa-f38f-44e8-97d8-6da32276b0b3" >
+		<ee:transform doc:name="Set Response" doc:id="56b5d041-671d-4edc-affa-f9e08b404711" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"status": "OK"
+}]]></ee:set-payload>
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="httpStatus" ><![CDATA[204]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<bip-log-sdk:info-log doc:name="Response" doc:id="bba7cffc-40db-424f-900d-091735e323b2" message="Response Healthcheck Service" businessProcess="Healthcheck Service">
+			<bip-log-sdk:content ><![CDATA[#[%dw 2.0
+output application/json
+---
+{
+	"correlationId": correlationId,
+	"message": "Status OK for $(application.name) service",
+	"httpCode": vars.httpCode,
+	"timestamp": now(),
+	"appName": app.name
+}]]]></bip-log-sdk:content>
+		</bip-log-sdk:info-log>
+	</sub-flow>
+</mule>

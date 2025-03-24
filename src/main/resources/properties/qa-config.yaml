@@ -1,0 +1,24 @@
+configuration: "aaa"
+
+pro:
+  idx: "010"
+  
+  
+oracle:
+  mediobanca:
+    url: ""
+    user: ""
+    password: ""
+    service: ""
+
+salesoforce:
+  host:
+  user:
+  password:
+   
+s-salesforce-api:
+  protocol: ""
+  host: ""
+  port: ""
+  clientId: "![]"
+  clientSecret: "![]"

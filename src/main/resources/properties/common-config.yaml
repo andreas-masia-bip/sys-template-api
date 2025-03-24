@@ -1,0 +1,9 @@
+application:
+  runtime: ${app.runtime}
+  name: ${artifactId}
+  version: ${version}
+
+baseUri: "/v1"
+port: "8081"
+
+api.autodiscovery: "sss"

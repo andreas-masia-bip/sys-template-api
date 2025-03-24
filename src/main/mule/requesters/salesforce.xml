@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	
+	<flow name="requesters-salesforce-query" doc:id="2a4f7257-bef8-4478-ad8b-2724a689187d" >
+		<salesforce:query doc:name="Query" doc:id="7351812f-7cf4-4f3f-ac09-60e503928022" config-ref="Salesforce_Config">
+			<salesforce:salesforce-query ><![CDATA[#[vars.sf.query]]]></salesforce:salesforce-query>
+			<salesforce:parameters ><![CDATA[#[%dw 2.0
+output application/java
+---
+vars.sf.parameters]]]></salesforce:parameters>
+		</salesforce:query>
+	</flow>
+</mule>

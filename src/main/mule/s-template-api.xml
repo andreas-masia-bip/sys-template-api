@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mediobanca-log-sdk="http://www.mulesoft.org/schema/mule/mediobanca-log-sdk" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/mediobanca-log-sdk http://www.mulesoft.org/schema/mule/mediobanca-log-sdk/current/mule-mediobanca-log-sdk.xsd">
+	<flow name="s-template-api-main" doc:id="7ff31742-20fc-4ee1-a4f5-2cce4633e36a" >
+		<http:listener doc:name="Listener" doc:id="bbfc152b-5997-43e3-bf26-dd3b355d4bd1" config-ref="HTTP_Listener_config" path="/*">
+			<http:response statusCode="#[vars.httpStatus]" />
+			<http:error-response statusCode="#[vars.httpStatus]" >
+				<http:body ><![CDATA[#[payload]]]></http:body>
+			</http:error-response>
+		</http:listener>
+		<error-handler ref="commonErrorHandler" />
+	</flow>
+	<flow name="patch:\users\(userId):application\json:Router" doc:id="def80e3d-f84e-4ab6-8efa-8c7e83012c13" >
+		<flow-ref doc:name="save-originals" doc:id="e25a75ba-d131-4ad4-b198-8c59fb92efe8" name="save-originals"/>
+		<logger level="INFO" doc:name="Logger Input" doc:id="a130a955-955c-48f7-9be2-65089ba296c8" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"correlationId": correlationId,&#10;	"message": "Received Input for $(flow.name)",&#10;	"content": vars.originalPayload,&#10;	"timestamp": now(),&#10;	"appName": app.name&#10;}]' />
+		<flow-ref doc:name="patch-users-by-userId-implementation" doc:id="202b2eb2-8e22-4dff-a537-286bdb117bec" name="patch-users-by-userId-implementation"/>
+	</flow>
+	<flow name="get:\healtcheck:Router" doc:id="da498289-02ef-45a4-a19e-d934e12af37b" >
+		<logger level="INFO" doc:name="Logger Input" doc:id="2e38e6d3-90de-42a6-84c3-cdde9e64c6f1" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"correlationId": correlationId,&#10;	"message": "Received Input for $(flow.name)",&#10;	"content": vars.originalPayload,&#10;	"timestamp": now(),&#10;	"appName": app.name&#10;}]' />
+		<flow-ref doc:name="patch-users-by-userId-implementation" doc:id="a764e751-b1c1-47ca-a767-6114a165379b" name="patch-users-by-userId-implementation" />
+	</flow>
+</mule>

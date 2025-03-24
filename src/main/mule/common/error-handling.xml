@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<error-handler name="commonErrorHandler" doc:id="ede57766-48e5-40b0-97b0-0ea8c5467dfa" >
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0d14a328-0929-4470-a2fc-5a3ed7990f94" type="HTTP:CONNECTIVITY">
+			<ee:transform doc:name="Set Http Status, Error Response" doc:id="00a6b6ad-d2a8-43e7-8dda-493bc2cc55d2" >
+				<ee:message >
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+					<ee:set-variable variableName="errorResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorMessage": error.errorMessage,
+	"errorDeatils": error.detailedDescription,
+	"errorType": error.errorType,
+	"inputPayload": vars.inputPayload,
+	"inputAttributes": {
+		"queryParams": vars.inputAttributes.queryParams,
+		"uriParams": vars.inputAttributes.uriParams,
+	},
+	"appName": app.name,
+	"flowName": flow.name,
+	"timestamp": now(),
+	"correlationId": correlationId
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<set-payload value="#[vars.errorResponse]" doc:name="Set Payload" doc:id="b071ffe6-3633-487d-972e-0a86230c9a98" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="aacd82f3-21d4-42f4-80c0-885203f95173" type="HTTP:NOT_FOUND">
+			<ee:transform doc:name="Set Http Status, Error Response" doc:id="c9c394f7-a87a-4704-8205-6ce882562915" >
+				<ee:message />
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[404]]></ee:set-variable>
+					<ee:set-variable variableName="errorResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorMessage": error.errorMessage,
+	"errorDeatils": error.detailedDescription,
+	"errorType": error.errorType,
+	"inputPayload": vars.inputPayload,
+	"inputAttributes": {
+		"queryParams": vars.inputAttributes.queryParams,
+		"uriParams": vars.inputAttributes.uriParams,
+	},
+	"appName": app.name,
+	"flowName": flow.name,
+	"timestamp": now(),
+	"correlationId": correlationId
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<set-payload value="#[vars.errorResponse]" doc:name="Set Payload" doc:id="f3a548c7-91d2-4aac-baf0-da1b830ae974" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="f3cfb0db-3e6d-4c5d-b2cc-fd07f52d5f81" type="HTTP:SERVICE_UNAVAILABLE" >
+			<ee:transform doc:name="Set Http Status, Error Response" doc:id="5e9189c1-885a-446a-97cc-492b152f82e7" >
+				<ee:message />
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[503]]></ee:set-variable>
+					<ee:set-variable variableName="errorResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorMessage": error.errorMessage,
+	"errorDeatils": error.detailedDescription,
+	"errorType": error.errorType,
+	"inputPayload": vars.inputPayload,
+	"inputAttributes": {
+		"queryParams": vars.inputAttributes.queryParams,
+		"uriParams": vars.inputAttributes.uriParams,
+	},
+	"appName": app.name,
+	"flowName": flow.name,
+	"timestamp": now(),
+	"correlationId": correlationId
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<set-payload value="#[vars.errorResponse]" doc:name="Set Payload" doc:id="d857cec4-e8f3-496d-85ce-042f6cfbd466" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d7a42fb4-34ca-4115-b9ec-c01ad7c78c08" type="HTTP:UNAUTHORIZED" >
+			<ee:transform doc:name="Set Http Status, Error Response" doc:id="71ced388-3a04-492b-9240-48cc4efb193a" >
+				<ee:message />
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[401]]></ee:set-variable>
+					<ee:set-variable variableName="errorResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorMessage": error.errorMessage,
+	"errorDeatils": error.detailedDescription,
+	"errorType": error.errorType,
+	"inputPayload": vars.inputPayload,
+	"inputAttributes": {
+		"queryParams": vars.inputAttributes.queryParams,
+		"uriParams": vars.inputAttributes.uriParams,
+	},
+	"appName": app.name,
+	"flowName": flow.name,
+	"timestamp": now(),
+	"correlationId": correlationId
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<set-payload value="#[vars.errorResponse]" doc:name="Set Payload" doc:id="444156c1-ced7-46fc-8320-a467682d4448" />
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="420a7681-db33-43d5-89f4-2f871a7aaa5d" >
+			<ee:transform doc:name="Set Http Status, Error Response" doc:id="ab3e7eef-6d8f-4d7e-b92c-21ac24633983" >
+				<ee:message />
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[500]]></ee:set-variable>
+					<ee:set-variable variableName="errorResponse" ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"errorMessage": error.errorMessage,
+	"errorDeatils": error.detailedDescription,
+	"errorType": error.errorType,
+	"inputPayload": vars.inputPayload,
+	"inputAttributes": {
+		"queryParams": vars.inputAttributes.queryParams,
+		"uriParams": vars.inputAttributes.uriParams,
+	},
+	"appName": app.name,
+	"flowName": flow.name,
+	"timestamp": now(),
+	"correlationId": correlationId
+}]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+			<set-payload value="#[vars.errorResponse]" doc:name="Set Payload" doc:id="3dce6f19-b93f-4fe3-932c-bfe38c8b0c61" />
+		</on-error-propagate>
+	
+</error-handler>
+</mule>

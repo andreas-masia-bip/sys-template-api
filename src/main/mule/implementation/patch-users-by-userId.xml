@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="patch-users-by-userId-implementation" doc:id="6fd49015-f21e-40cc-9f9b-813723bc6b9b" >
+		<logger level="INFO" doc:name="Logger Input" doc:id="35dfd5fd-6554-49cd-85ec-42b4db83d074" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"correlationId": correlationId,&#10;	"message": "Received Input for $(flow.name)",&#10;	"content": vars.originalPayload,&#10;	"timestamp": now(),&#10;	"appName": app.name&#10;}]'/>
+		<ee:transform doc:name="Set Salesforce Query For Account" doc:id="401a85a6-d6b7-4a4a-a52a-57fd12d1bea6" >
+			<ee:message >
+			</ee:message>
+			<ee:variables >
+				<ee:set-variable variableName="sf" ><![CDATA[%dw 2.0
+output application/java
+---
+{
+	"query": "select Id from Account where Name = :Name",
+	"parameters": {
+		"Name": "Marco Antonio"
+	}
+}]]></ee:set-variable>
+			</ee:variables>
+		</ee:transform>
+		<flow-ref doc:name="requesters-salesforce-query" doc:id="997df8b3-2d84-4dd1-ac1f-d4ae4814e2ea" name="requesters-salesforce-query"/>
+		<flow-ref doc:name="requesters-salesforce-query" doc:id="68346437-6587-47dc-90ea-a0c15da7022b" name="requesters-salesforce-query" />
+		<set-variable value="200" doc:name="Set Http Status" doc:id="5b4f9695-7f90-45bd-ae20-50bf9283f712" variableName="httpStatus" />
+		<logger level="INFO" doc:name="Logger Output" doc:id="07d19b7d-7ce8-4587-b6b7-99e3c59396a3" message='#[%dw 2.0&#10;output application/json&#10;---&#10;{&#10;	"correlationId": correlationId,&#10;	"message": "Received Output for $(flow.name)",&#10;	"content": payload,&#10;	"httpCode": vars.httpCode,&#10;	"timestamp": now(),&#10;	"appName": app.name&#10;}]'/>
+	</flow>
+</mule>
